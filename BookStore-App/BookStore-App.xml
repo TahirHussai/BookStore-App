@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BookStore-App</name>
+    </assembly>
+    <members>
+        <member name="F:BookStore_App.Controllers.HomeController._loggerService">
+            <summary>
+            This is a test API Controller
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
