@@ -1,5 +1,7 @@
+using AutoMapper;
 using BookStore_App.Contracts;
 using BookStore_App.Data;
+using BookStore_App.Data.Mapping;
 using BookStore_App.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +46,7 @@ namespace BookStore_App
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
+            services.AddAutoMapper(typeof(Maps));
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(a =>
             {
