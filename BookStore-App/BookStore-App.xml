@@ -78,11 +78,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:BookStore_App.Controllers.UsersController.Login(BookStore_App.Data.DTO_s.UserDto)">
+        <member name="M:BookStore_App.Controllers.UsersController.Register(BookStore_App.Data.DTO_s.UserDto)">
             <summary>
-            User Login Endpoint
-             </summary>
-             <param name="dto"></param>
+            User End Point
+            </summary>
+            <param name="userDTO"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>
