@@ -13,7 +13,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookStore_UI.Service
+namespace BookStore_UI.Services
 {
     public class AuthenticationRepository : IAuthenticationRepository
     {
@@ -51,7 +51,7 @@ namespace BookStore_UI.Service
         //    // after installation configure in startup.cs class
         //}
 
-        public async Task<bool> Login(LoginModel user)
+        public async Task<bool> Login(LoginModel user)  
         {
             var request = new HttpRequestMessage(HttpMethod.Post
                , Endpoints.LoginEndPoint);
@@ -73,10 +73,12 @@ namespace BookStore_UI.Service
             // after installation configure in startup.cs class
             //Store Token
             await _localStorage.SetItemAsync("authToken", token.Token);
+            await _localStorage.SetItemAsync("LoginName", user.EmailAddress);
 
             //Change auth state of app
-            await ((ApiAuthenticationStateProvider)_apiAuthenticationStateProvider).LoggedIn();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token.Token);
+            await ((ApiAuthenticationStateProvider)_apiAuthenticationStateProvider).LoggedIn(user.EmailAddress);
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("bearer", token.Token);
             return true;
         }
 
@@ -101,5 +103,6 @@ namespace BookStore_UI.Service
 
             return response.IsSuccessStatusCode;
         }
+       
     }
 }

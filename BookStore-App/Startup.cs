@@ -83,7 +83,9 @@ namespace BookStore_App
             services.AddSingleton<ILoggerService, LoggerService>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepositorycs, BookRepository>();
-            services.AddControllers();
+            services.AddControllers();//.AddNewtonsoftJson(op =>
+            //     op.SerializerSettings.ReferenceLoopHandling =
+            //         Newtonsoft.Json.ReferenceLoopHandling.Ignore)
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,7 +114,7 @@ namespace BookStore_App
             app.UseCors("CorsPolicy");
             SeedData.seed(userManager,roleManager).Wait();
             app.UseRouting();
-
+            //to make jwt the authentication service is available to the application
             app.UseAuthentication();
             app.UseAuthorization();
 

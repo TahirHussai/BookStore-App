@@ -10,10 +10,10 @@
 @if (isField == true)
 {
 <div class="alert" alert-danger>
-    <p>Something went wrong </p>
+    <ErrorMessage Message="Something went wrong wih the operation"></ErrorMessage>
 </div>
 }
-<div class="card-body">
+
     <EditForm Model="Model" OnValidSubmit="HandleRegistration">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -35,8 +35,6 @@
         <button type="submit" class="btn btn-primary btn-block">Register</button>
 
     </EditForm>
-</div>
-
 
 @code {
     private RegistrationModel Model = new RegistrationModel();

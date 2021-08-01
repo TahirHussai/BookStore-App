@@ -27,7 +27,7 @@ namespace BookStore_App.Services
             return await Save();
         }
 
-        public async Task<List<Book>> GetAll()
+        public async Task<IList<Book>> GetAll()
         {
             var books = await _context.Books.ToListAsync();
             return books;

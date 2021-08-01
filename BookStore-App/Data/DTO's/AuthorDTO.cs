@@ -12,7 +12,7 @@ namespace BookStore_App.Data.DTO_s
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Bio { get; set; }
-        public virtual List<BookDTO> Books { get; set; }
+        public virtual IList<BookDTO> Books { get; set; }
 
     }
 

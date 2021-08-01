@@ -31,13 +31,15 @@ namespace BookStore_App.Controllers
         /// </summary>
         /// <return>Return List of Authors</return>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAuthors()
         {
             try
             {
                 _loggerService.LogInfo("Attempted Get All Authors");
                 var authors = await _authorRepository.GetAll();
-                var res = _mapper.Map<List<AuthorDTO>>(authors);
+                var res = _mapper.Map<IList<AuthorDTO>>(authors);
                 _loggerService.LogInfo("Successfully got All Authors");
 
                 return Ok(res);
@@ -52,7 +54,7 @@ namespace BookStore_App.Controllers
         /// </summary>
         /// <return>Add Author Authors</return>
         [HttpPost]
-        [Authorize(Roles ="Administrator")]
+        //[Authorize(Roles ="Administrator")]
         public async Task<IActionResult> Create(AuthorCreateDTO dto)
         {
             try
@@ -92,7 +94,7 @@ namespace BookStore_App.Controllers
         /// <param name="dto"></param>
         /// <return>Add Author Authors</return>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Administrator,Customer")]
+        //[Authorize(Roles = "Administrator,Customer")]
         public async Task<IActionResult> Update(int id, AuthorUpdateDTO dto)
         {
             _loggerService.LogInfo($"Author with id :{id} Update Attempted");

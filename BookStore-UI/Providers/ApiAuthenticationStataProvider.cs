@@ -45,7 +45,7 @@ namespace BookStore_UI.Providers
                 return new AuthenticationState(new System.Security.Claims.ClaimsPrincipal(new ClaimsIdentity()));
             }
         }
-        public async Task LoggedIn()
+        public async Task LoggedIn(string email)
         {
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
             var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(savedToken);

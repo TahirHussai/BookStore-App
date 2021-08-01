@@ -27,7 +27,7 @@ namespace BookStore_App.Services
             return await Save();
         }
 
-        public async Task<List<Author>> GetAll()
+        public async Task<IList<Author>> GetAll()
         {
             var authors = await _context.Authors.ToListAsync();
             return authors;

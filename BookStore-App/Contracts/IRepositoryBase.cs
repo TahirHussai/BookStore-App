@@ -7,7 +7,7 @@ namespace BookStore_App.Contracts
 {
     public interface IRepositoryBase<T> where T : class
     {
-        Task<List<T>> GetAll();
+        Task<IList<T>> GetAll();
         Task<T> GetById(int id);
         Task<bool> Create(T entity);
         Task<bool> Update(T entity);
