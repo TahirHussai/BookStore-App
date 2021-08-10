@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookStore_UI.Contracts
 {
-    //public interface IBookRepository : IBaseRepository<Book>
-    //{
-    //}
+    public interface IBookRepository : IBaseRepository<Book>
+    {
+    }
 }

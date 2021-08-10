@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using BookStore_UI.Contracts;
 using BookStore_UI.Data;
 using BookStore_UI.Providers;
+using BookStore_UI.Service;
 using BookStore_UI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -44,6 +45,8 @@ namespace BookStore_UI
             services.AddScoped <JwtSecurityTokenHandler>();
             services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
+            services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IFileUpload, FileUpload>();
             services.AddSingleton(_ => Configuration);
         }
 

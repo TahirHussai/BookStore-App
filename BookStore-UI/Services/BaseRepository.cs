@@ -97,7 +97,7 @@ namespace BookStore_UI.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
                

@@ -35,7 +35,7 @@ namespace BookStore_App.Controllers
             {
                 _loggerService.LogInfo("Attempted Get All Books");
                 var authors = await _bookRepositorycs.GetAll();
-                var res = _mapper.Map<List<BookDTO>>(authors);
+                var res = _mapper.Map<IList<BookDTO>>(authors);
                 _loggerService.LogInfo("Successfully got All Books");
 
                 return Ok(res);
