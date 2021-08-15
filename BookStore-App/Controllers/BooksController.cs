@@ -2,6 +2,7 @@
 using BookStore_App.Contracts;
 using BookStore_App.Data;
 using BookStore_App.Data.DTO_s;
+using BookStore_App.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,11 +19,13 @@ namespace BookStore_App.Controllers
         private readonly IBookRepositorycs  _bookRepositorycs;
         private readonly ILoggerService _loggerService;
         private readonly IMapper _mapper;
-        public BooksController(IMapper mapper, IBookRepositorycs  bookRepositorycs, ILoggerService loggerService)
+        private readonly IToDoListService _toDoListService;
+        public BooksController(IToDoListService toDoListService, IMapper mapper, IBookRepositorycs  bookRepositorycs, ILoggerService loggerService)
         {
             _bookRepositorycs =  bookRepositorycs;
             _loggerService = loggerService;
             _mapper = mapper;
+            _toDoListService = toDoListService;
         }
         /// <summary>
         /// Get All Books
@@ -44,6 +47,13 @@ namespace BookStore_App.Controllers
             {
                 return InternalError($"{ ex.Message}-{ex.InnerException}");
             }
+        }
+        [HttpGet]
+        [Route("Getv2")]
+        public async Task<ActionResult<PaginatedList<Book>>> GetBookByPagination(int? pageNumber, string sortField, string sortOrder)
+        {
+            var list = await _toDoListService.GetList(pageNumber, sortField, sortOrder);
+            return list;
         }
         /// <summary>
         /// Create An Authors

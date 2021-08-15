@@ -1,6 +1,7 @@
 ﻿
 using Blazored.LocalStorage;
 using BookStore_UI.Contracts;
+using BookStore_UI.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BookStore_UI.Services
@@ -21,6 +23,7 @@ namespace BookStore_UI.Services
             _client = client;
             _localStorage = localStorageService;
         }
+
         public async Task<bool> Create(string url, T obj)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, url);
@@ -75,7 +78,23 @@ namespace BookStore_UI.Services
             }
             return null;
         }
+        public async Task<PaginatedList<T>> GetList(string url, int? pageNumber, string sortField, string sortOrder)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, url  + "?pageNumber="+pageNumber + "&sortField=" + sortField+ "&sortOrder="+sortOrder);
 
+            var client = _client.CreateClient();
+            client.DefaultRequestHeaders.Authorization =
+               new AuthenticationHeaderValue("bearer", await GetBearerToken());
+            HttpResponseMessage httpResponse = await client.SendAsync(request);
+
+            using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            var result = await System.Text.Json.JsonSerializer.DeserializeAsync<PaginatedList<T>>(responseStream, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
+            });
+            return result;
+        }
         public async Task<IList<T>> Get(string url)
         {
             try
@@ -128,5 +147,7 @@ namespace BookStore_UI.Services
         {
             return await _localStorage.GetItemAsync<string>("authToken");
         }
+
+       
     }
 }

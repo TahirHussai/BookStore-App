@@ -1,0 +1,160 @@
+﻿@page "/books/"
+@*@attribute [Authorize]*@
+
+@inject IBookRepository _repo
+@inject IJSRuntime jsRuntime
+<h4>Books List</h4>
+<br />
+@if (toDoList == null)
+{
+
+    <div class="alert alert-dismissible alert-danger">
+        <h5>
+            <span class="oi oi-circle-x"></span>
+            Loading Books
+        </h5>
+    </div> }
+else
+{
+    <AuthorizeView Roles="Administrator">
+        <a href="/books/create" class="btn btn-primary">
+            <span class="oi oi-plus"></span>
+            Create New Book
+        </a>
+    </AuthorizeView>
+
+    
+    <br />
+    @if (toDoList.Count() < 1)
+    {
+
+        <div class="alert alert-dismissible alert-danger">
+            <h5>
+                <span class="oi oi-circle-x"></span>
+                There are no books in the data store.
+                Click 'Create Book' to Begin
+            </h5>
+        </div> }
+    else
+    {
+        <table class="table table-responsive">
+
+            <thead class="thead-light">
+                <tr>
+                    <th></th>
+                    <th><span @onclick="@(() => Sort("Title"))">Title</span><i class="@(SortIndicator("Title"))"></i></th>
+                    <th><span @onclick="@(() => Sort("ISBN"))">ISBN</span><i class="@(SortIndicator("ISBN"))"></i></th>
+                    <th><span @onclick="@(() => Sort("Price"))">Price</span><i class="@(SortIndicator("Price"))"></i></th>
+                    <th><span @onclick="@(() => Sort("Author"))">Author</span><i class="@(SortIndicator("Author"))"></i></th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+          
+
+            <tbody>
+                @foreach (var book in toDoList)
+                {
+                    <tr>
+                        <td>
+                            <img src="uploads/@book.Image" class="img-thumbnail" style="height:100px;width:100px" />
+                        </td>
+                        <td>@book.Title</td>
+                        <td>@book.ISBN</td>
+                        <td>@string.Format("{0:C}", book.Price)</td>
+                        <td>
+                            @if (@book.Author == null)
+                            {
+                                <span class="text-muted">No Author Recorded</span> }
+                            else
+                            {
+                                <span>@book.Author.Firstname @book.Author.Lastname </span>}
+                        </td>
+                        <td>
+                            <a href="/books/view/@book.Id" class="btn btn-primary">
+                                <span class="oi oi-book"></span>
+                            </a>
+
+                            <AuthorizeView Roles="Administrator">
+                                <a href="/books/edit/@book.Id" class="btn btn-warning">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+                                <a href="/books/delete/@book.Id" class="btn btn-danger">
+                                    <span class="oi oi-delete"></span>
+                                </a>
+                            </AuthorizeView>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>}}
+<div>
+    <Pager PageIndex=@paginatedList.PageIndex TotalPages=@paginatedList.TotalPages OnClick="PageIndexChanged"
+           HasNextPage=@paginatedList.HasNextPage HasPreviousPage=@paginatedList.HasPreviousPage>
+    </Pager>
+</div>
+
+
+
+
+
+
+@code {
+
+    private IList<Book> Model;
+    protected async override Task OnInitializedAsync()
+    {
+        await GetData();
+    }
+    PaginatedList<Book> paginatedList = new PaginatedList<Book>();
+    IEnumerable<Book> toDoList;
+
+
+    // Page and Sort data
+    int? pageNumber = 1;
+    string currentSortField = "Title";
+    string currentSortOrder = "Asc";
+
+    private async Task Sort(string sortField)
+    {
+        if (sortField.Equals(currentSortField))
+        {
+            currentSortOrder = currentSortOrder.Equals("Asc") ? "Desc" : "Asc";
+        }
+        else
+        {
+            currentSortField = sortField;
+            currentSortOrder = "Asc";
+        }
+        paginatedList = await _repo.GetList(Endpoints.BooksEndPointPagi, pageNumber, currentSortField, currentSortOrder);
+        toDoList = paginatedList.Items;
+    }
+    private async Task GetData()
+    {
+        paginatedList = await _repo.GetList(Endpoints.BooksEndPointPagi, pageNumber, currentSortField, currentSortOrder);
+        toDoList = paginatedList.Items;
+    }
+    private string SortIndicator(string sortField)
+    {
+        if (sortField.Equals(currentSortField))
+        {
+            return currentSortOrder.Equals("Asc") ? "oi oi-sort-ascending" : "oi oi-sort-descending";
+        }
+        return string.Empty;
+        
+    }
+    public async void PageIndexChanged(int newPageNumber)
+    {
+        if (newPageNumber < 1 || newPageNumber > paginatedList.TotalPages)
+        {
+            return;
+        }
+        pageNumber = newPageNumber;
+        paginatedList = await _repo.GetList(Endpoints.BooksEndPointPagi, pageNumber, currentSortField, currentSortOrder);
+        toDoList = paginatedList.Items;
+        StateHasChanged();
+    }
+
+
+
+}

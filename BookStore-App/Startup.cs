@@ -83,6 +83,7 @@ namespace BookStore_App
             services.AddSingleton<ILoggerService, LoggerService>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IBookRepositorycs, BookRepository>();
+            services.AddScoped<IToDoListService, ToDoListService>();
           services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling =
     Newtonsoft.Json.ReferenceLoopHandling.Ignore
